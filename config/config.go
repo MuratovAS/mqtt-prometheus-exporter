@@ -58,6 +58,7 @@ type Metric struct {
 	ConstantLabels prometheus.Labels `mapstructure:"const_labels"`
 	TopicLabels    TopicLabels       `mapstructure:"topic_labels"`
 	JSONField      string            `mapstructure:"json_field"`
+	Expiration     time.Duration     `mapstructure:"expiration"`
 }
 
 // PrometheusDescription constructs description.

@@ -42,7 +42,7 @@ func (h *messageHandler) getMessageHandler() pahomqtt.MessageHandler {
 		for _, tl := range h.metric.TopicLabels.KeysInOrder() {
 			labelValues = append(labelValues, getTopicPart(msg.Topic(), h.metric.TopicLabels[tl]))
 		}
-		h.collector.Observe(h.metric, msg.Topic(), floatValue, labelValues...)
+		h.collector.Observe(h.metric, msg.Topic(), floatValue, h.metric.Expiration, labelValues...)
 	}
 }
 
@@ -67,7 +67,7 @@ func (h *messageHandler) getJSONMessageHandler() pahomqtt.MessageHandler {
 				log.Logger.With(zap.Error(err)).Warnf("Got data with unexpected value '%s' and failed to parse to float.", value)
 				return
 			}
-			h.collector.Observe(h.metric, msg.Topic(), floatValue, labelValues...)
+			h.collector.Observe(h.metric, msg.Topic(), floatValue, h.metric.Expiration, labelValues...)
 		}
 	}
 }
