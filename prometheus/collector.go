@@ -2,6 +2,7 @@ package prometheus
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	gocache "github.com/patrickmn/go-cache"
@@ -20,6 +21,7 @@ type Collector interface {
 type memoryCachedCollector struct {
 	cache        *gocache.Cache
 	descriptions []*prometheus.Desc
+	metrics      []config.Metric
 }
 
 type collectorEntry struct {
@@ -39,6 +41,7 @@ func NewCollector(expiration time.Duration, possibleMetrics []config.Metric) Col
 	return &memoryCachedCollector{
 		cache:        gocache.New(expiration, expiration*10),
 		descriptions: descs,
+		metrics:      possibleMetrics,
 	}
 }
 
@@ -60,8 +63,24 @@ func (c *memoryCachedCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (c *memoryCachedCollector) Collect(mc chan<- prometheus.Metric) {
 	log.Logger.Debugf("Collecting. Returned '%d' metrics.", c.cache.ItemCount())
-	for _, rawItem := range c.cache.Items() {
+	for key, rawItem := range c.cache.Items() {
 		item := rawItem.Object.(*collectorEntry)
-		mc <- prometheus.NewMetricWithTimestamp(item.ts, item.m)
+		metricName := strings.Split(key, "|")[0]
+		if metric, ok := c.getMetricByName(metricName); ok {
+			if metric.FakeTS {
+				mc <- prometheus.NewMetricWithTimestamp(time.Now(), item.m)
+			} else {
+				mc <- prometheus.NewMetricWithTimestamp(item.ts, item.m)
+			}
+		}
 	}
+}
+
+func (c *memoryCachedCollector) getMetricByName(name string) (config.Metric, bool) {
+	for _, metric := range c.metrics {
+		if metric.PrometheusName == name {
+			return metric, true
+		}
+	}
+	return config.Metric{}, false
 }
