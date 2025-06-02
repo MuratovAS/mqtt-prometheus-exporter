@@ -94,6 +94,7 @@ metrics:
     # using json_field you can consume message in a valid JSON format
     # value is then parsed from JSON tree by the given path/field
     json_field: "total.count"
+    expiration: 120s
 ```
 
 Minimal config file can contain only `metrics` definition. Default values will be used for logging level (`INFO`), HTTP server port (`8079`) and MQTT broker URI (`:9641`).
