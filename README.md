@@ -67,6 +67,8 @@ cache:
 metrics:
     # name of the MQTT topic
   - mqtt_topic: "/home/+/temperature"
+    # transmit a fake timestamp. This can be useful when using sensors that transmit data in a non-deterministic manner.
+    fakets: true
     # name of the exported metric in prometheus
     prom_name: "temperature"
     # type of prometheus metric, valid values are: "gauge" and "counter"
