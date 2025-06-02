@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/torilabs/mqtt-prometheus-exporter/config"
@@ -17,12 +18,13 @@ type fakeCollector struct {
 	obsLabelValues []string
 }
 
-func (c *fakeCollector) Observe(metric config.Metric, topic string, v float64, labelValues ...string) {
+func (c *fakeCollector) Observe(metric config.Metric, topic string, v float64, expiration time.Duration, labelValues ...string) {
 	c.observed = true
 	c.obsMetric = metric
 	c.obsTopic = topic
 	c.obsValue = v
 	c.obsLabelValues = labelValues
+	// We don't use expiration in tests, so we just ignore it
 }
 
 func (c *fakeCollector) Describe(chan<- *prometheus.Desc) {
