@@ -81,7 +81,7 @@ func (s *e2eTestSuite) Test_EndToEnd_Metrics() {
 
 	s.Contains(metricsBody, `# HELP sensor_count`)
 	s.Contains(metricsBody, `# TYPE sensor_count gauge`)
-	s.Contains(metricsBody, `sensor_count{topic="/home/overview"} 22`)
+	s.Contains(metricsBody, `sensor_count_total.count{topic="/home/overview"} 22`)
 }
 
 func (s *e2eTestSuite) httpResponseBody(path string) string {
