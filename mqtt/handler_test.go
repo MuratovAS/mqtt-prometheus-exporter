@@ -166,6 +166,22 @@ func Test_messageHandler(t *testing.T) {
 			},
 			wantObserved: false,
 		},
+		{
+			name: "JSON with dots in field names parsed correctly",
+			args: args{
+				metric: config.Metric{
+					MqttTopic: "/topic/level2/level3/#",
+					JSONField: []string{"total.count"},
+				},
+			},
+			msg: fakeMessage{
+				topic:   "/topic/level2/level3/device",
+				payload: []byte(`{"total": {"count": 22, "unknown": "none"}, "random": "2"}`),
+			},
+			wantObserved:    true,
+			wantValue:       22,
+			wantLabelValues: []string{"/topic/level2/level3/device"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
