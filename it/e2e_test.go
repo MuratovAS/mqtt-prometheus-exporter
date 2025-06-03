@@ -79,8 +79,8 @@ func (s *e2eTestSuite) Test_EndToEnd_Metrics() {
 	s.Contains(metricsBody, `# TYPE iot_memory gauge`)
 	s.Contains(metricsBody, `iot_memory{device="owen",device2="home",mylabel="label value",topic="/home/owen/memory"} 13`)
 
-	s.Contains(metricsBody, `# HELP sensor_count`)
-	s.Contains(metricsBody, `# TYPE sensor_count gauge`)
+	s.Contains(metricsBody, `# HELP sensor_count_total_count`)
+	s.Contains(metricsBody, `# TYPE sensor_count_total_count gauge`)
 	s.Contains(metricsBody, `sensor_count_total_count{topic="/home/overview"} 22`)
 }
 
