@@ -57,9 +57,10 @@ type Metric struct {
 	MetricType     string            `mapstructure:"type"`
 	ConstantLabels prometheus.Labels `mapstructure:"const_labels"`
 	TopicLabels    TopicLabels       `mapstructure:"topic_labels"`
-	JSONField      string            `mapstructure:"json_field"`
+	JSONField      []string          `mapstructure:"json_field"`
 	Expiration     time.Duration     `mapstructure:"expiration"`
 	FakeTS         bool              `mapstructure:"fakets"`
+	BaseName       string            `mapstructure:"-"`
 }
 
 // PrometheusDescription constructs description.

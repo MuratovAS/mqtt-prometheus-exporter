@@ -51,7 +51,15 @@ func (c *memoryCachedCollector) Observe(metric config.Metric, topic string, v fl
 		log.Logger.With(zap.Error(err)).Warnf("Creation of prometheus metric failed.")
 		return
 	}
-	key := fmt.Sprintf("%s|%s", metric.PrometheusName, topic)
+	// Include JSON field in cache key if present
+	var key string
+	if len(metric.JSONField) > 0 {
+		field := metric.PrometheusName[len(metric.BaseName)+1:] // Extract field from name
+		key = fmt.Sprintf("%s|%s|%s", metric.BaseName, topic, field)
+	} else {
+		key = fmt.Sprintf("%s|%s", metric.PrometheusName, topic)
+	}
+	log.Logger.Debugf("Caching metric with key: %s", key)
 	c.cache.Set(key, &collectorEntry{m: m, ts: time.Now()}, expiration)
 }
 
