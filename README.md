@@ -1,3 +1,10 @@
+# This repository is just a fork
+
+Changes:
+- Ability to extract values ​​from multiple json fields
+- Ability to configure caching time for each metric separately
+- Ability to specify a fake ts (gets rid of a graph with gaps)
+
 # MQTT Prometheus Exporter
 
 _The MQTT Prometheus exporter subscribes to the MQTT broker and publish the received messages as prometheus metrics._
