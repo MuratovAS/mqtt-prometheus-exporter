@@ -73,7 +73,7 @@ func (h *messageHandler) getJSONMessageHandler() pahomqtt.MessageHandler {
 				// Generate field-specific metric name
 				origName := h.metric.PrometheusName
 				h.metric.PrometheusName = fmt.Sprintf("%s_%s", h.metric.BaseName, field)
-				log.Logger.Debugf("Observing metric %s for field %s with value %f", 
+				log.Logger.Debugf("Observing metric %s for field %s with value %f",
 					h.metric.PrometheusName, field, floatValue)
 				h.collector.Observe(h.metric, msg.Topic(), floatValue, h.metric.Expiration, labelValues...)
 				// Restore original name
